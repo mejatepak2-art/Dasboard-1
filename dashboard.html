@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alip Bot - Dashboard Control Panel</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Alip Bot</span>
+                </div>
+                <button class="toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="pm-logs">
+                    <i class="fas fa-envelope"></i>
+                    <span>PM Logs</span>
+                </a>
+                <a href="#" class="nav-item" data-section="sewa">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Sewa Sessions</span>
+                </a>
+                <a href="#" class="nav-item" data-section="owners">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Owner Management</span>
+                </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item" data-section="groups">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Groups</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item" data-section="credentials">
+                    <i class="fas fa-key"></i>
+                    <span>Credentials</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="breadcrumb">
+                    <span id="breadcrumbText">Dashboard</span>
+                </div>
+                <div class="top-bar-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Cari..." id="searchInput">
+                    </div>
+                    <div class="status-indicator">
+                        <span class="status-dot" id="botStatus"></span>
+                        <span id="statusText">Offline</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-pic">
+                        <span id="userName">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="section active">
+                    <div class="section-header">
+                        <h1>Dashboard Overview</h1>
+                        <button class="btn btn-primary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #3b82f6;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Total Users</h3>
+                                <p id="totalUsers">0</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #10b981;">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Groups</h3>
+                                <p id="totalGroups">0</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #f59e0b;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>PM Messages</h3>
+                                <p id="totalPMs">0</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #ef4444;">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Active Sewa</h3>
+                                <p id="activeSewa">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h2>Recent PM Messages</h2>
+                            <div class="table-container">
+                                <table id="pmTable">
+                                    <thead>
+                                        <tr>
+                                            <th>From</th>
+                                            <th>Message</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pmTableBody">
+                                        <tr>
+                                            <td colspan="3" style="text-align: center; color: #999;">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2>Active Sewa Sessions</h2>
+                            <div class="table-container">
+                                <table id="sewaTable">
+                                    <thead>
+                                        <tr>
+                                            <th>JID</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sewaTableBody">
+                                        <tr>
+                                            <td colspan="3" style="text-align: center; color: #999;">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PM Logs Section -->
+                <section id="pm-logs-section" class="section">
+                    <div class="section-header">
+                        <h1>Private Message Logs</h1>
+                        <div class="header-controls">
+                            <input type="date" id="pmDateFilter" class="form-control">
+                            <button class="btn btn-secondary" id="clearPMLogs">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="pmLogsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sender</th>
+                                        <th>Message</th>
+                                        <th>Timestamp</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pmLogsBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #999;">No data</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sewa Section -->
+                <section id="sewa-section" class="section">
+                    <div class="section-header">
+                        <h1>Sewa Management</h1>
+                        <button class="btn btn-primary" id="addSewaBtn">
+                            <i class="fas fa-plus"></i> Add Sewa
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="sewaManagementTable">
+                                <thead>
+                                    <tr>
+                                        <th>JID</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Days Left</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sewaManagementBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: #999;">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Owners Section -->
+                <section id="owners-section" class="section">
+                    <div class="section-header">
+                        <h1>Owner Management</h1>
+                        <button class="btn btn-primary" id="addOwnerBtn">
+                            <i class="fas fa-plus"></i> Add Owner
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="ownersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Phone Number</th>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Added Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ownersTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #999;">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users-section" class="section">
+                    <div class="section-header">
+                        <h1>User Management</h1>
+                        <input type="text" placeholder="Search users..." id="userSearch" class="form-control" style="max-width: 300px;">
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>JID</th>
+                                        <th>Name</th>
+                                        <th>Premium</th>
+                                        <th>Level</th>
+                                        <th>Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #999;">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Groups Section -->
+                <section id="groups-section" class="section">
+                    <div class="section-header">
+                        <h1>Group Management</h1>
+                        <input type="text" placeholder="Search groups..." id="groupSearch" class="form-control" style="max-width: 300px;">
+                    </div>
+
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="groupsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Group ID</th>
+                                        <th>Group Name</th>
+                                        <th>Members</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="groupsTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #999;">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="section">
+                    <div class="section-header">
+                        <h1>Bot Settings</h1>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="card">
+                            <h3>General Settings</h3>
+                            <div class="form-group">
+                                <label for="botPrefix">Bot Prefix</label>
+                                <input type="text" id="botPrefix" class="form-control" placeholder="Enter bot prefix">
+                            </div>
+                            <div class="form-group">
+                                <label for="botName">Bot Name</label>
+                                <input type="text" id="botName" class="form-control" placeholder="Enter bot name">
+                            </div>
+                            <div class="form-group">
+                                <label for="botStatus">Bot Status</label>
+                                <select id="botStatusSelect" class="form-control">
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                    <option value="maintenance">Maintenance</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success" id="saveSettingsBtn">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <h3>API Configuration</h3>
+                            <div class="form-group">
+                                <label for="apiKey">API Key</label>
+                                <div class="input-group">
+                                    <input type="password" id="apiKey" class="form-control" placeholder="*****">
+                                    <button class="btn btn-secondary" id="toggleApiKey">Show</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-warning" id="regenerateApiKeyBtn">
+                                <i class="fas fa-redo"></i> Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Credentials Section -->
+                <section id="credentials-section" class="section">
+                    <div class="section-header">
+                        <h1>Dashboard Credentials</h1>
+                        <button class="btn btn-primary" id="refreshCredentialsBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Current Credentials</h3>
+                        <div class="credentials-display">
+                            <div class="credential-item">
+                                <label>Email:</label>
+                                <span id="currentEmail">Loading...</span>
+                            </div>
+                            <div class="credential-item">
+                                <label>Username:</label>
+                                <span id="currentUsername">Loading...</span>
+                            </div>
+                            <div class="credential-item">
+                                <label>Password:</label>
+                                <span id="currentPassword">••••••••</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Update Credentials</h3>
+                        <form id="credentialsForm">
+                            <div class="form-group">
+                                <label for="newEmail">New Email</label>
+                                <input type="email" id="newEmail" class="form-control" placeholder="Enter new email">
+                            </div>
+                            <div class="form-group">
+                                <label for="newUsername">New Username</label>
+                                <input type="text" id="newUsername" class="form-control" placeholder="Enter new username">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-success" id="updateAllCredentialsBtn">
+                                    <i class="fas fa-save"></i> Update All
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="updateEmailBtn">
+                                    <i class="fas fa-envelope"></i> Update Email Only
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="updateUsernameBtn">
+                                    <i class="fas fa-user"></i> Update Username Only
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="updatePasswordBtn">
+                                    <i class="fas fa-lock"></i> Update Password Only
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3>Security Notes</h3>
+                        <ul class="security-notes">
+                            <li><i class="fas fa-shield-alt"></i> Credentials are stored securely in the .env file</li>
+                            <li><i class="fas fa-key"></i> Changes take effect immediately after update</li>
+                            <li><i class="fas fa-exclamation-triangle"></i> Make sure to remember your new credentials</li>
+                            <li><i class="fas fa-robot"></i> You can also change credentials via bot commands</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
